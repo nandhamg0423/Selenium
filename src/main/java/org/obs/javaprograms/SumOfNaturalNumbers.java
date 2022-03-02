@@ -7,10 +7,7 @@ public class SumOfNaturalNumbers {
     public static void main(String[] args) {
         SumOfNaturalNumbers son = new SumOfNaturalNumbers();
         son.sum();
-
-
     }
-
 
     void sum() {
 
@@ -18,6 +15,6 @@ public class SumOfNaturalNumbers {
 
             s = s + i;
         }
-        System.out.println("Sum" + s);
+        System.out.println("Sum of natural numbers" + s);
     }
 }

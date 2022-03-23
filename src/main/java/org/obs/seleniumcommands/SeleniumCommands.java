@@ -1,5 +1,7 @@
 package org.obs.seleniumcommands;
 
+import org.obs.homework.Utility;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
@@ -14,6 +16,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.Random;
 
 
 //import java.awt.*;
@@ -118,6 +121,7 @@ public class SeleniumCommands {
         String expectedSubmitButtonTest = "Log in";
         Assert.assertEquals(actualSubmitButtonTest, expectedSubmitButtonTest, "Incorrect Text in Login button");
     }
+
     @Test
     public void searchButton() {
         driver.get("http://demowebshop.tricentis.com/");
@@ -139,8 +143,41 @@ public class SeleniumCommands {
         String expectedsearchbutton = "Search";
         Assert.assertEquals(actualsearchbutton, expectedsearchbutton, "Incorrect Text in Search button");
     }
-
-
-
-
+    @Test
+    public void gender(String gender) {
+        List<WebElement> elementList = driver.findElements(By.xpath("//label[@class='forcheckbox']"));
+        for (int i = 0; i < elementList.size(); i++) {
+            if (elementList.get(i).getText().equals("Male")) {
+                elementList.get(i).click();
+            }
+        }
+    }
+    @Test
+    public void verifyGender() throws InterruptedException {
+        driver.get("http://demowebshop.tricentis.com/");
+        WebElement regg = driver.findElement(By.xpath("//a[text()='Register']"));
+        regg.click();
+        gender("Male");
+        Thread.sleep(3000);
+        WebElement firstName = driver.findElement(By.xpath("//input[@class='text-box single-line'and@id='FirstName']"));
+        firstName.sendKeys("james");
+        WebElement lastname = driver.findElement(By.xpath("//input[@class='text-box single-line'and@id='LastName']"));
+        lastname.sendKeys("k");
+        WebElement regemail = driver.findElement(By.xpath("//input[contains(@id,'Email')]"));
+        regemail.click();
+        Random randomGenerator = new Random();
+        int randomInt = randomGenerator.nextInt(1000);
+        regemail.sendKeys("username" + randomInt + "@gmail.com");
+        WebElement regpassword = driver.findElement(By.xpath("//input[@class='text-box single-line password'and@id='Password']"));
+        regpassword.sendKeys("iamthepassword");
+        WebElement confirmpassword = driver.findElement(By.xpath("//input[@class='text-box single-line password'and@id='ConfirmPassword']"));
+        confirmpassword.sendKeys("iamthepassword");
+        Thread.sleep(3000);
+        WebElement regbutton = driver.findElement(By.xpath("//input[contains(@id,'register-button')]"));
+        regbutton.click();
+        Thread.sleep(6000);
+    }
 }
+
+
+

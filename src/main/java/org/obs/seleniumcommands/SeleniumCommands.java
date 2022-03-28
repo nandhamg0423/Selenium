@@ -1,25 +1,21 @@
 package org.obs.seleniumcommands;
 
 import org.obs.homework.Utility;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.Point;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
-
-//import java.awt.*;
+import java.util.Set;
 
 public class SeleniumCommands {
     WebDriver driver;
@@ -119,7 +115,11 @@ public class SeleniumCommands {
         String actualSubmitButtonTest = submit.getAttribute("value");
         System.out.println(actualSubmitButtonTest);
         String expectedSubmitButtonTest = "Log in";
-        Assert.assertEquals(actualSubmitButtonTest, expectedSubmitButtonTest, "Incorrect Text in Login button");
+        // Assert.assertEquals(actualSubmitButtonTest, expectedSubmitButtonTest, "Incorrect Text in Login button");
+        String tagname = submit.getTagName();
+        System.out.println("tagname is " + tagname);
+        String cssProperty = submit.getCssValue("color");
+        System.out.println(cssProperty);
     }
 
     @Test
@@ -143,6 +143,7 @@ public class SeleniumCommands {
         String expectedsearchbutton = "Search";
         Assert.assertEquals(actualsearchbutton, expectedsearchbutton, "Incorrect Text in Search button");
     }
+
     @Test
     public void gender(String gender) {
         List<WebElement> elementList = driver.findElements(By.xpath("//label[@class='forcheckbox']"));
@@ -152,6 +153,7 @@ public class SeleniumCommands {
             }
         }
     }
+
     @Test
     public void verifyGender() throws InterruptedException {
         driver.get("http://demowebshop.tricentis.com/");
@@ -176,6 +178,142 @@ public class SeleniumCommands {
         WebElement regbutton = driver.findElement(By.xpath("//input[contains(@id,'register-button')]"));
         regbutton.click();
         Thread.sleep(6000);
+    }
+
+    @Test
+    public void verifyElementPresent() {
+        driver.get("http://demowebshop.tricentis.com/");
+        WebElement login = driver.findElement(By.cssSelector("a.ico-login"));
+        login.click();
+        WebElement submit = driver.findElement(By.cssSelector("input[value='Log in']"));
+        Boolean buttonresult = submit.isDisplayed();
+        System.out.println(buttonresult);
+        Assert.assertTrue(buttonresult, "submit button not displayed");
+    }
+
+    @Test
+    public void verifyElementenabled() {
+        driver.get("http://demowebshop.tricentis.com/");
+        WebElement login = driver.findElement(By.cssSelector("a.ico-login"));
+        login.click();
+        WebElement submit = driver.findElement(By.cssSelector("input[value='Log in']"));
+        Boolean buttonenable = submit.isEnabled();
+        System.out.println(buttonenable);
+        Assert.assertTrue(buttonenable, "Submit button not enabled");
+    }
+
+    @Test
+    public void checkboxSelectionStatus() throws InterruptedException {
+        driver.get("http://demowebshop.tricentis.com/");
+        WebElement login = driver.findElement(By.cssSelector("a.ico-login"));
+        login.click();
+        WebElement remind = driver.findElement(By.cssSelector("input#RememberMe"));
+        Boolean beforeSelection = remind.isSelected();
+        System.out.println(beforeSelection);
+        Assert.assertFalse(beforeSelection, "Checkbox selection not expected");
+        remind.click();
+        Thread.sleep(3000);
+        Boolean checkboxselect = remind.isSelected();
+        System.out.println(checkboxselect);
+        Assert.assertTrue(checkboxselect, "Checkbox not selected");
+    }
+
+    @Test
+    public void verifyPromptAlert() throws InterruptedException {
+        driver.get("https://demoqa.com/alerts");
+        WebElement prompt = driver.findElement(By.cssSelector("button#promtButton"));
+        prompt.click();
+        Alert alert = driver.switchTo().alert();
+        String alertString = alert.getText();
+        System.out.println(alertString);
+        alert.sendKeys("name");
+        System.out.println(alert);
+        Thread.sleep(6000);
+        alert.accept();
+        //alert.dismiss();
+    }
+
+    @Test
+    public void verifySimpleAlert() {
+        driver.get("https://demoqa.com/alerts");
+        WebElement alert1 = driver.findElement(By.id("alertButton"));
+        alert1.click();
+        Alert alert = driver.switchTo().alert();
+        System.out.println(alert.getText());
+        alert.accept();
+        //alert.dismiss();
+    }
+
+    @Test
+    public void verifyConfirmationAlert() {
+        driver.get("https://demoqa.com/alerts");
+        WebElement alert1 = driver.findElement(By.id("confirmButton"));
+        alert1.click();
+        Alert alert = driver.switchTo().alert();
+        System.out.println(alert.getText());
+        alert.accept();
+        //alert.dismiss();
+    }
+
+    @Test
+    public void verifyDropDown() {
+        driver.get("https://demo.guru99.com/test/newtours/");
+        List<WebElement> registerlink = driver.findElements(By.xpath("//td[@class='mouseOut']/child::a"));
+        for (int i = 0; i < registerlink.size(); i++) {
+            if (registerlink.get(i).getText().equals("REGISTER")) {
+                registerlink.get(i).click();
+                break;
+            }
+        }
+        WebElement country = driver.findElement(By.xpath("//select[contains(@name,'country')]"));
+        Select select = new Select(country);
+        select.selectByIndex(0);
+        //select.selectByValue("INDIA");
+        //select.selectByVisibleText("INDIA");
+        List<WebElement> dropdownoption = select.getOptions();
+        System.out.println(dropdownoption.size());
+        for (int i = 0; i < dropdownoption.size(); i++) {
+            System.out.println(dropdownoption.get(i));
+        }
+    }
+
+    @Test
+    public void demoDeleteAlert() {
+        driver.get("https://demo.guru99.com/test/delete_customer.php");
+        WebElement text = driver.findElement(By.name("cusid"));
+        text.sendKeys("Nanditha");
+        WebElement submit = driver.findElement(By.name("submit"));
+        submit.click();
+        Alert alert = driver.switchTo().alert();
+        alert.accept();
+        System.out.println(alert.getText());
+        alert.accept();
+    }
+
+    @Test
+    public void verifyMultipleWindows() {
+        driver.get("https://demo.guru99.com/popup.php");
+        String parentWindow = driver.getWindowHandle();
+        System.out.println(parentWindow);
+        WebElement clickhere = driver.findElement(By.xpath("//a[text()='Click Here']"));
+        clickhere.click();
+        Set<String> windows = driver.getWindowHandles();
+        Iterator<String> iterator = windows.iterator();
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+            String newWindow = iterator.next();
+            if (!newWindow.equals(parentWindow)) {
+                driver.switchTo().window(newWindow);
+                WebElement emails = driver.findElement(By.xpath("//input[@type='text'and @name='emailid']"));
+                Utility utility = new Utility();
+                String random2 = utility.random();
+                emails.sendKeys(random2);
+                WebElement buttonsubmit = driver.findElement(By.xpath("//input[contains(@name,'btnLogin')]"));
+                buttonsubmit.click();
+                driver.close();
+            }
+        }
+        driver.switchTo().window(parentWindow);
     }
 }
 

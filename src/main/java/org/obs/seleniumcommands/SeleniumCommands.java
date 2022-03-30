@@ -399,7 +399,7 @@ public class SeleniumCommands {
     }
 
     @Test
-    public void verifyMouseOver() {
+    public void verifyMouseHover() {
         driver.get("https://demoqa.com/menu/");
         //List<WebElement> list= driver.findElements(By.xpath("//ul[@id='nav']//a")); //spacing
         //List<WebElement> list= driver.findElements(By.xpath("//ul[@id='nav']/child::li"));

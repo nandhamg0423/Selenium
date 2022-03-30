@@ -6,12 +6,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import javax.swing.*;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -314,6 +316,80 @@ public class SeleniumCommands {
             }
         }
         driver.switchTo().window(parentWindow);
+    }
+
+    @Test
+    public void verifyFramesInSelenium() {
+        driver.get("https://demoqa.com/frames");
+        //driver.switchTo().frame(1);
+        //driver.switchTo().frame("frame1");
+        WebElement frameElement = driver.findElement(By.id("frame1"));
+        driver.switchTo().frame(frameElement);
+        WebElement heading = driver.findElement(By.id("sampleHeading"));
+        String sampleHeading = heading.getText();
+        System.out.println(sampleHeading);
+    }
+
+    @Test
+    public void testing() throws InterruptedException {
+        driver.get("https://selenium.obsqurazone.com/select-input.php");
+        WebElement color = driver.findElement(By.xpath("//select[@id='single-input-field']"));
+        Select colorSelect = new Select(color);
+        colorSelect.selectByIndex(0);
+        List<WebElement> colorDropdown = colorSelect.getOptions();
+        for (int i = 0; i < colorDropdown.size(); i++) {
+            System.out.println(colorDropdown.get(i));
+            colorDropdown.get(1).click();
+            WebElement colorPresent = driver.findElement(By.xpath("//div[@id='message-one']"));
+            String actualcolorPresent = colorPresent.getText();
+            String expextedcolorPresent = "Selected Color : Red";
+            Assert.assertEquals(actualcolorPresent, expextedcolorPresent, "Error message");
+        }
+    }
+
+    @Test
+    public void verifyMultiSelectedColor() throws InterruptedException {
+        driver.get("https://selenium.obsqurazone.com/select-input.php");
+        WebElement d = driver.findElement(By.xpath("//select[@id='multi-select-field']"));
+        Select s = new Select(d);
+        List<WebElement> t = s.getOptions();
+        System.out.println("Dropdown options are: ");
+        for (WebElement i : t) {
+            System.out.println(i.getText());
+        }
+        s.selectByVisibleText("Red");
+        Thread.sleep(1000);
+        s.selectByVisibleText("Green");
+        Thread.sleep(1000);
+        WebElement f = s.getFirstSelectedOption();
+        System.out.println("First selected option is: " + f);
+        WebElement firstselectedbutton = driver.findElement(By.xpath("//button[@id='button-first']"));
+        Thread.sleep(1000);
+        firstselectedbutton.click();
+        WebElement getallselected=driver.findElement(By.xpath("//button[@id='button-all']"));
+        getallselected.click();
+        //s.deselectByIndex(0);
+        Thread.sleep(1000);
+        s.deselectAll();
+        Thread.sleep(2000);
+    }
+    @Test
+    public void verfifyRightClick(){
+        driver.get("https://demo.guru99.com/test/simple_context_menu.html");
+        WebElement mouserightclick=driver.findElement(By.xpath("//span[@class='context-menu-one btn btn-neutral']"));
+        Actions action=new Actions(driver);
+        action.contextClick(mouserightclick).build().perform();
+    }
+    @Test
+    public void verifydoubleclick() throws InterruptedException {
+        driver.get("https://demo.guru99.com/test/simple_context_menu.html");
+        WebElement mousedoubleclick=driver.findElement(By.xpath("//button[@ondblclick='myFunction()']"));
+        Actions actions=new Actions(driver);
+        actions.doubleClick(mousedoubleclick).build().perform();
+        Alert alert = driver.switchTo().alert();
+        System.out.println(alert.getText());
+        alert.accept();
+        Thread.sleep(3000);
     }
 }
 

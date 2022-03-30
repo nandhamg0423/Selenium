@@ -14,10 +14,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import javax.swing.*;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class SeleniumCommands {
     WebDriver driver;
@@ -362,36 +359,64 @@ public class SeleniumCommands {
         s.selectByVisibleText("Green");
         Thread.sleep(1000);
         WebElement f = s.getFirstSelectedOption();
-        System.out.println("First selected option is: " + f);
+        String first = f.getText();
+        System.out.println("First selected" + first);
         WebElement firstselectedbutton = driver.findElement(By.xpath("//button[@id='button-first']"));
         Thread.sleep(1000);
         firstselectedbutton.click();
-        WebElement getallselected=driver.findElement(By.xpath("//button[@id='button-all']"));
+        WebElement getallselected = driver.findElement(By.xpath("//button[@id='button-all']"));
         getallselected.click();
         //s.deselectByIndex(0);
         Thread.sleep(1000);
-        s.deselectAll();
-        Thread.sleep(2000);
+        //s.deselectAll();
+        //Thread.sleep(2000);
+        WebElement getfirstt = driver.findElement(By.xpath("//div[@id='message-two']"));
+        String getfirst1 = getfirstt.getText();
+        System.out.println("getfirst is" + getfirst1);
+        String actualGetfirst = getfirstt.getText();
+        String expectedGetfirst = "First selected color is : Red";
+        Assert.assertEquals(actualGetfirst, expectedGetfirst, "Error");
     }
+
     @Test
-    public void verfifyRightClick(){
+    public void verfifyRightClick() {
         driver.get("https://demo.guru99.com/test/simple_context_menu.html");
-        WebElement mouserightclick=driver.findElement(By.xpath("//span[@class='context-menu-one btn btn-neutral']"));
-        Actions action=new Actions(driver);
+        WebElement mouserightclick = driver.findElement(By.xpath("//span[@class='context-menu-one btn btn-neutral']"));
+        Actions action = new Actions(driver);
         action.contextClick(mouserightclick).build().perform();
     }
+
     @Test
     public void verifydoubleclick() throws InterruptedException {
         driver.get("https://demo.guru99.com/test/simple_context_menu.html");
-        WebElement mousedoubleclick=driver.findElement(By.xpath("//button[@ondblclick='myFunction()']"));
-        Actions actions=new Actions(driver);
+        WebElement mousedoubleclick = driver.findElement(By.xpath("//button[@ondblclick='myFunction()']"));
+        Actions actions = new Actions(driver);
         actions.doubleClick(mousedoubleclick).build().perform();
         Alert alert = driver.switchTo().alert();
         System.out.println(alert.getText());
         alert.accept();
         Thread.sleep(3000);
     }
+
+    @Test
+    public void mouseHover() {
+        driver.get("https://demoqa.com/menu/");
+        List<WebElement> navigationbar = driver.findElements(By.xpath("//ul[@id='nav']//a"));
+        String navbars[] = {"Main Item 1", "Main Item 2", "Sub Item", "Sub Item", "SUB SUB LIST", "Sub Sub Item 1", "Sub Sub Item 2", "Main Item 3" };
+        List<String> list = new ArrayList<>();
+        for (String lang : navbars) {
+            list.add(lang);
+        }
+        for (WebElement l : navigationbar) {
+            for (int i = 0; i < list.size(); i++) {
+                if (l.getText().equals(list.get(i))) {
+                    System.out.println(l.getText());
+                }
+            }
+        }
+    }
 }
+
 
 
 

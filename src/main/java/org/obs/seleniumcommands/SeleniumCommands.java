@@ -399,20 +399,13 @@ public class SeleniumCommands {
     }
 
     @Test
-    public void mouseHover() {
+    public void verifyMouseOver() {
         driver.get("https://demoqa.com/menu/");
-        List<WebElement> navigationbar = driver.findElements(By.xpath("//ul[@id='nav']//a"));
-        String navbars[] = {"Main Item 1", "Main Item 2", "Sub Item", "Sub Item", "SUB SUB LIST", "Sub Sub Item 1", "Sub Sub Item 2", "Main Item 3" };
-        List<String> list = new ArrayList<>();
-        for (String lang : navbars) {
-            list.add(lang);
-        }
-        for (WebElement l : navigationbar) {
-            for (int i = 0; i < list.size(); i++) {
-                if (l.getText().equals(list.get(i))) {
-                    System.out.println(l.getText());
-                }
-            }
+        //List<WebElement> list= driver.findElements(By.xpath("//ul[@id='nav']//a")); //spacing
+        //List<WebElement> list= driver.findElements(By.xpath("//ul[@id='nav']/child::li"));
+        List<WebElement> list= driver.findElements(By.xpath("//ul[@id='nav']"));
+        for(WebElement nav:list){
+            System.out.println(nav.getText());
         }
     }
 }

@@ -47,7 +47,7 @@ public class SeleniumCommands {
 
     @AfterMethod
     public void tearDown() {
-        driver.close();
+        // driver.close();
     }
 
     @Test
@@ -328,7 +328,7 @@ public class SeleniumCommands {
     }
 
     @Test
-    public void testing() throws InterruptedException {
+    public void verifyFirstScrollBar() throws InterruptedException {
         driver.get("https://selenium.obsqurazone.com/select-input.php");
         WebElement color = driver.findElement(By.xpath("//select[@id='single-input-field']"));
         Select colorSelect = new Select(color);
@@ -345,37 +345,73 @@ public class SeleniumCommands {
     }
 
     @Test
-    public void verifyMultiSelectedColor() throws InterruptedException {
-        driver.get("https://selenium.obsqurazone.com/select-input.php");
-        WebElement d = driver.findElement(By.xpath("//select[@id='multi-select-field']"));
-        Select s = new Select(d);
-        List<WebElement> t = s.getOptions();
-        System.out.println("Dropdown options are: ");
-        for (WebElement i : t) {
-            System.out.println(i.getText());
+    public void verifyscrollMultiple(String firstcolor, String secondcolor) {
+        WebElement scrollbar = driver.findElement(By.xpath("//select[@id='multi-select-field']"));
+        Select select = new Select(scrollbar);
+        select.selectByIndex(0);
+        select.selectByIndex(1);
+        List<WebElement> scrollbarcolor = select.getOptions();
+        for (int i = 0; i < scrollbarcolor.size(); i++) {
+            System.out.println(scrollbarcolor.get(i).getText().equals(firstcolor));
+            System.out.println(scrollbarcolor.get(i).getText().equals(secondcolor));
         }
-        s.selectByVisibleText("Red");
-        Thread.sleep(1000);
-        s.selectByVisibleText("Green");
-        Thread.sleep(1000);
-        WebElement f = s.getFirstSelectedOption();
-        String first = f.getText();
-        System.out.println("First selected" + first);
-        WebElement firstselectedbutton = driver.findElement(By.xpath("//button[@id='button-first']"));
-        Thread.sleep(1000);
-        firstselectedbutton.click();
-        WebElement getallselected = driver.findElement(By.xpath("//button[@id='button-all']"));
-        getallselected.click();
-        //s.deselectByIndex(0);
-        Thread.sleep(1000);
-        //s.deselectAll();
-        //Thread.sleep(2000);
-        WebElement getfirstt = driver.findElement(By.xpath("//div[@id='message-two']"));
-        String getfirst1 = getfirstt.getText();
-        System.out.println("getfirst is" + getfirst1);
-        String actualGetfirst = getfirstt.getText();
-        String expectedGetfirst = "First selected color is : Red";
-        Assert.assertEquals(actualGetfirst, expectedGetfirst, "Error");
+    }
+
+    @Test
+    public void verifyfirstSelect(String firstcolor, String secondcolor) {
+        WebElement scrollbar = driver.findElement(By.xpath("//select[@id='multi-select-field']"));
+        Select select = new Select(scrollbar);
+        select.selectByIndex(0);
+        select.selectByIndex(1);
+        select.getFirstSelectedOption();
+        List<WebElement> scrollbarcolor = select.getOptions();
+        for (int i = 0; i < scrollbarcolor.size(); i++) {
+            System.out.println(scrollbarcolor.get(i).getText().equals(firstcolor));
+            System.out.println(scrollbarcolor.get(i).getText().equals(secondcolor));
+        }
+    }
+
+    @Test
+    public void verifygetallColor(String firstcolor, String secondcolor) {
+        WebElement scrollbar = driver.findElement(By.xpath("//select[@id='multi-select-field']"));
+        Select select = new Select(scrollbar);
+        select.selectByIndex(0);
+        select.selectByIndex(1);
+        select.getAllSelectedOptions();
+        List<WebElement> scrollbarcolor = select.getOptions();
+        for (int i = 0; i < scrollbarcolor.size(); i++) {
+            System.out.println(scrollbarcolor.get(i).getText().equals(firstcolor));
+            System.out.println(scrollbarcolor.get(i).getText().equals(secondcolor));
+        }
+    }
+
+    @Test
+    public void verifydeselectColor(int firstcolor, int secondcolor) {
+        WebElement scrollbar = driver.findElement(By.xpath("//select[@id='multi-select-field']"));
+        Select select = new Select(scrollbar);
+        select.selectByIndex(0);
+        select.selectByIndex(1);
+        select.deselectByIndex(0);
+        select.deselectByIndex(1);
+        List<WebElement> scrollbarcolor = select.getOptions();
+        for (int i = 0; i < scrollbarcolor.size(); i++) {
+            System.out.println(scrollbarcolor.get(i).getText().equals(firstcolor));
+            System.out.println(scrollbarcolor.get(i).getText().equals(secondcolor));
+        }
+    }
+
+    @Test
+    public void verifymainMultiple() throws InterruptedException {
+        driver.get("https://selenium.obsqurazone.com/select-input.php");
+        verifyscrollMultiple("Red", "Green");
+        WebElement getfirstselected = driver.findElement(By.xpath("//button[@id='button-first']"));
+        getfirstselected.click();
+        Thread.sleep(3000);
+        WebElement getallSelected = driver.findElement(By.xpath("//button[@id='button-all']"));
+        getallSelected.click();
+        verifydeselectColor(0, 1);
+        Thread.sleep(3000);
+
     }
 
     @Test
@@ -399,17 +435,56 @@ public class SeleniumCommands {
     }
 
     @Test
-    public void verifyMouseHover() {
-        driver.get("https://demoqa.com/menu/");
-        //List<WebElement> list= driver.findElements(By.xpath("//ul[@id='nav']//a")); //spacing
-        //List<WebElement> list= driver.findElements(By.xpath("//ul[@id='nav']/child::li"));
-        List<WebElement> list= driver.findElements(By.xpath("//ul[@id='nav']"));
-        for(WebElement nav:list){
-            System.out.println(nav.getText());
+    public void verifymainofmenu(String mainmenuargument) throws InterruptedException {
+        List<WebElement> mainnavigationbar = driver.findElements(By.xpath("//ul[@id='nav']//a"));
+        for (int i = 0; i < mainnavigationbar.size(); i++) {
+            if (mainnavigationbar.get(i).getText().equals(mainmenuargument)) {
+                Actions mainmenuaction = new Actions(driver);
+                mainmenuaction.moveToElement(mainnavigationbar.get(i)).build().perform();
+                //mainnavigationbar.get(i).click();
+                //Thread.sleep(2000);
+            }
         }
     }
+
+    @Test
+    public void verifysubMenu(String submenuarguments) {
+        List<WebElement> subnavigationbar = driver.findElements(By.xpath("//ul//li//a[contains(text(),'Sub')]"));
+        for (int i = 0; i < subnavigationbar.size(); i++) {
+            if (subnavigationbar.get(i).equals(submenuarguments)) {
+                Actions submenuaction = new Actions(driver);
+                submenuaction.moveToElement(subnavigationbar.get(i)).build().perform();
+            }
+        }
+    }
+
+    @Test
+    public void mainofmenuBar() throws InterruptedException {
+        driver.get("https://demoqa.com/menu/");
+        verifymainofmenu("Main Item 2");
+        Thread.sleep(3000);
+        verifysubMenu("SUB SUB LIST »");
+        Thread.sleep(3000);
+    }
+
+    @Test
+    public void verifydemotourMenuItem(String select) {
+        driver.get("https://demo.guru99.com/test/newtours/index.php");
+        List<WebElement> demoTourList = driver.findElements(By.xpath("//tr[@class='mouseOut']//td//a"));
+        for (int i = 0; i < demoTourList.size(); i++) {
+            if (demoTourList.get(i).getText().equals(select)) {
+                System.out.println(demoTourList.get(i).getText());
+                Actions actions = new Actions(driver);
+                actions.moveToElement(demoTourList.get(i)).build().perform();
+            }
+        }
+    }
+
+    @Test
+    public void verifyMainDemotourMousHover() {
+        driver.get("https://demo.guru99.com/test/newtours/");
+        verifydemotourMenuItem("Home");
+    }
 }
-
-
 
 

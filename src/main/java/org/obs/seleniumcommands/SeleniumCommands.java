@@ -47,7 +47,7 @@ public class SeleniumCommands {
 
     @AfterMethod
     public void tearDown() {
-        // driver.close();
+         driver.close();
     }
 
     @Test
@@ -441,8 +441,6 @@ public class SeleniumCommands {
             if (mainnavigationbar.get(i).getText().equals(mainmenuargument)) {
                 Actions mainmenuaction = new Actions(driver);
                 mainmenuaction.moveToElement(mainnavigationbar.get(i)).build().perform();
-                //mainnavigationbar.get(i).click();
-                //Thread.sleep(2000);
             }
         }
     }

@@ -1,5 +1,6 @@
 package org.obs.seleniumcommands;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.obs.homework.Utility;
 import org.openqa.selenium.*;
 import org.openqa.selenium.WebElement;
@@ -21,13 +22,16 @@ public class SeleniumCommands {
 
     public void testInitialize(String browser) {
         if (browser.equals("chrome")) {
-            System.setProperty("webdriver.chrome.driver", "E:\\Selenium_Files\\chromedriver.exe");
+           // System.setProperty("webdriver.chrome.driver", "E:\\Selenium_Files\\chromedriver.exe");
+            WebDriverManager.chromedriver().setup();
             driver = new ChromeDriver();
         } else if (browser.equals("firefox")) {
-            System.setProperty("webdriver.gecko.driver", "E:\\Selenium_Files\\geckodriver.exe");
+            //System.setProperty("webdriver.gecko.driver", "E:\\Selenium_Files\\geckodriver.exe");
+            WebDriverManager.firefoxdriver().setup();
             driver = new FirefoxDriver();
         } else if (browser.equals("edge")) {
-            System.setProperty("webdriver.edge.driver", "E:\\Selenium_Files\\msedgedriver.exe");
+            //System.setProperty("webdriver.edge.driver", "E:\\Selenium_Files\\msedgedriver.exe");
+            WebDriverManager.edgedriver().setup();
             driver = new EdgeDriver();
         } else {
             try {
@@ -47,7 +51,7 @@ public class SeleniumCommands {
 
     @AfterMethod
     public void tearDown() {
-         driver.close();
+         //driver.close();
     }
 
     @Test
@@ -482,6 +486,51 @@ public class SeleniumCommands {
     public void verifyMainDemotourMousHover() {
         driver.get("https://demo.guru99.com/test/newtours/");
         verifydemotourMenuItem("Home");
+    }
+    @Test
+    public void verifyDragandDrop(){
+        driver.get("https://demoqa.com/droppable");
+        WebElement drag= driver.findElement(By.id("draggable"));
+        WebElement drop= driver.findElement(By.id("droppable"));
+        Actions dragdrop=new Actions(driver);
+        dragdrop.dragAndDrop(drag,drop).build().perform();
+
+    }
+    @Test
+    public void draganddropBy(){
+        driver.get("https://demoqa.com/dragabble");
+        WebElement dragElement=driver.findElement(By.xpath("//div[@id='dragBox']"));
+        Actions actions=new Actions(driver);
+        actions.dragAndDropBy(dragElement,200,200).build().perform();
+    }
+    @Test
+    public void keyboardActions(){
+        driver.get("https://demoqa.com/text-box");
+        WebElement fullNames=driver.findElement(By.xpath("//input[@id='userName']"));
+        fullNames.sendKeys("John");
+        WebElement email=driver.findElement(By.xpath("//input[@id='userEmail']"));
+        email.sendKeys("abc@gmail.com");
+        WebElement currentAddress=driver.findElement(By.xpath("//textarea[@id='currentAddress']"));
+        currentAddress.sendKeys("TP Road,TVM");
+        Actions actions=new Actions(driver);
+        /**select the current address**/
+        actions.keyDown(Keys.CONTROL).sendKeys("A").keyUp(Keys.CONTROL).build().perform();
+        /**copy the current address**/
+        actions.keyDown(Keys.CONTROL).sendKeys("C").keyUp(Keys.CONTROL).build().perform();
+        /**pres tab keys to switch permanent address**/
+        actions.sendKeys(Keys.TAB).build().perform();
+        /**pasting address**/
+        actions.keyDown(Keys.CONTROL).sendKeys("V").keyUp(Keys.CONTROL).build().perform();
+    }
+    @Test
+    public void verifyFileUpload(){
+        driver.get("https://demo.guru99.com/test/upload/");
+        WebElement choosefile=driver.findElement(By.xpath("//input[@id='uploadfile_0']"));
+        choosefile.sendKeys("E:\\Selenium_Files\\Sample.txt");
+        WebElement checkbox=driver.findElement(By.xpath("//input[@id='terms']"));
+        checkbox.click();
+        WebElement submitfile= driver.findElement(By.xpath("//button[@id='submitbutton']"));
+        submitfile.click();
     }
 }
 

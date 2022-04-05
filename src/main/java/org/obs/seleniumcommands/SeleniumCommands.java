@@ -1,6 +1,7 @@
 package org.obs.seleniumcommands;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.checkerframework.checker.units.qual.A;
 import org.obs.homework.Utility;
 import org.obs.homework.UtilityExcel;
 import org.openqa.selenium.*;
@@ -32,7 +33,7 @@ public class SeleniumCommands {
 
     public void testInitialize(String browser) {
         if (browser.equals("chrome")) {
-           // System.setProperty("webdriver.chrome.driver", "E:\\Selenium_Files\\chromedriver.exe");
+            // System.setProperty("webdriver.chrome.driver", "E:\\Selenium_Files\\chromedriver.exe");
             WebDriverManager.chromedriver().setup();
             driver = new ChromeDriver();
         } else if (browser.equals("firefox")) {
@@ -61,7 +62,7 @@ public class SeleniumCommands {
 
     @AfterMethod
     public void tearDown() {
-         //driver.close();
+        //driver.close();
     }
 
     @Test
@@ -77,8 +78,8 @@ public class SeleniumCommands {
         driver.get("http://demowebshop.tricentis.com");
         WebElement login = driver.findElement(By.cssSelector("li>a.ico-login"));
         login.click();
-        UtilityExcel excel=new UtilityExcel();
-        List<String> data=excel.readDataFromExcel("\\src\\main\\resources\\TestData.xlsx","Login");
+        UtilityExcel excel = new UtilityExcel();
+        List<String> data = excel.readDataFromExcel("\\src\\main\\resources\\TestData.xlsx", "Login");
         WebElement loginEmail = driver.findElement(By.cssSelector("input#Email"));
         System.out.println(data);
         loginEmail.sendKeys(data.get(2));
@@ -93,6 +94,7 @@ public class SeleniumCommands {
         String expectedemailID = "nandhamg5078@gmail.com";
         Assert.assertEquals(actualemailID, expectedemailID, "User login Failed");
     }
+
     @Test
     public void verifyClear() throws InterruptedException {
         driver.get("http://demowebshop.tricentis.com/");
@@ -499,32 +501,35 @@ public class SeleniumCommands {
         driver.get("https://demo.guru99.com/test/newtours/");
         verifydemotourMenuItem("Home");
     }
+
     @Test
-    public void verifyDragandDrop(){
+    public void verifyDragandDrop() {
         driver.get("https://demoqa.com/droppable");
-        WebElement drag= driver.findElement(By.id("draggable"));
-        WebElement drop= driver.findElement(By.id("droppable"));
-        Actions dragdrop=new Actions(driver);
-        dragdrop.dragAndDrop(drag,drop).build().perform();
+        WebElement drag = driver.findElement(By.id("draggable"));
+        WebElement drop = driver.findElement(By.id("droppable"));
+        Actions dragdrop = new Actions(driver);
+        dragdrop.dragAndDrop(drag, drop).build().perform();
 
     }
+
     @Test
-    public void draganddropBy(){
+    public void draganddropBy() {
         driver.get("https://demoqa.com/dragabble");
-        WebElement dragElement=driver.findElement(By.xpath("//div[@id='dragBox']"));
-        Actions actions=new Actions(driver);
-        actions.dragAndDropBy(dragElement,200,200).build().perform();
+        WebElement dragElement = driver.findElement(By.xpath("//div[@id='dragBox']"));
+        Actions actions = new Actions(driver);
+        actions.dragAndDropBy(dragElement, 200, 200).build().perform();
     }
+
     @Test
-    public void keyboardActions(){
+    public void keyboardActions() {
         driver.get("https://demoqa.com/text-box");
-        WebElement fullNames=driver.findElement(By.xpath("//input[@id='userName']"));
+        WebElement fullNames = driver.findElement(By.xpath("//input[@id='userName']"));
         fullNames.sendKeys("John");
-        WebElement email=driver.findElement(By.xpath("//input[@id='userEmail']"));
+        WebElement email = driver.findElement(By.xpath("//input[@id='userEmail']"));
         email.sendKeys("abc@gmail.com");
-        WebElement currentAddress=driver.findElement(By.xpath("//textarea[@id='currentAddress']"));
+        WebElement currentAddress = driver.findElement(By.xpath("//textarea[@id='currentAddress']"));
         currentAddress.sendKeys("TP Road,TVM");
-        Actions actions=new Actions(driver);
+        Actions actions = new Actions(driver);
         /**select the current address**/
         actions.keyDown(Keys.CONTROL).sendKeys("A").keyUp(Keys.CONTROL).build().perform();
         /**copy the current address**/
@@ -534,26 +539,28 @@ public class SeleniumCommands {
         /**pasting address**/
         actions.keyDown(Keys.CONTROL).sendKeys("V").keyUp(Keys.CONTROL).build().perform();
     }
+
     @Test
-    public void verifyFileUpload(){
+    public void verifyFileUpload() {
         driver.get("https://demo.guru99.com/test/upload/");
-        WebElement choosefile=driver.findElement(By.xpath("//input[@id='uploadfile_0']"));
+        WebElement choosefile = driver.findElement(By.xpath("//input[@id='uploadfile_0']"));
         choosefile.click();
         choosefile.sendKeys("E:\\Selenium_Files\\Sample.txt");
-        WebElement checkbox=driver.findElement(By.xpath("//input[@id='terms']"));
+        WebElement checkbox = driver.findElement(By.xpath("//input[@id='terms']"));
         checkbox.click();
-        WebElement submitfile= driver.findElement(By.xpath("//button[@id='submitbutton']"));
+        WebElement submitfile = driver.findElement(By.xpath("//button[@id='submitbutton']"));
         submitfile.click();
     }
+
     @Test
     public void fileuploadusingRobertclass() throws AWTException {
         driver.get("https://www.monsterindia.com/seeker/registration");
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
-        WebElement chooseFile=driver.findElement(By.xpath("//span[text()='Choose CV']"));
+        WebElement chooseFile = driver.findElement(By.xpath("//span[text()='Choose CV']"));
         chooseFile.click();
-        StringSelection S=new StringSelection("E:\\Selenium_Files\\Sample.txt");
-        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(S,null);
-        Robot robot=new Robot();
+        StringSelection S = new StringSelection("E:\\Selenium_Files\\Sample.txt");
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(S, null);
+        Robot robot = new Robot();
         robot.keyPress(KeyEvent.VK_ENTER);
         robot.keyRelease(KeyEvent.VK_ENTER);
         robot.keyPress(KeyEvent.VK_CONTROL);
@@ -563,14 +570,52 @@ public class SeleniumCommands {
         robot.keyPress(KeyEvent.VK_ENTER);
         robot.keyRelease(KeyEvent.VK_ENTER);
     }
+
     @Test
-    public void verifyJavaScriptExecutor(){
+    public void verifyJavaScriptExecutor() {
         driver.get("http://demowebshop.tricentis.com/");
-        JavascriptExecutor js=(JavascriptExecutor)driver;
+        JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("document.getElementById(\"newsletter-email\").value='nan@gmail.com'");
         js.executeScript("document.getElementById(\"newsletter-subscribe-button\").click()");
 
     }
+
+    @Test
+    public void multiDimensionalArray() {
+        ArrayList<ArrayList<String>> strlist = new ArrayList<ArrayList<String>>();
+        ArrayList<String> birds = new ArrayList<String>();
+        birds.add("parrot");
+        birds.add("crow");
+        birds.add("peacock");
+        ArrayList<String> animal = new ArrayList<String>();
+        animal.add("cow");
+        animal.add("elephant");
+        animal.add("cat");
+        ArrayList<String> color = new ArrayList<String>();
+        color.add("blue");
+        color.add("green");
+        color.add("red");
+        ArrayList<String> names = new ArrayList<String>();
+        names.add("Peter");
+        names.add("sam");
+        names.add("Sankar");
+        System.out.println(birds);
+        System.out.println(animal);
+        System.out.println(color);
+        System.out.println(names);
+        Iterator<String> iterator = animal.iterator();
+        for (int i = 0; i < strlist.size(); i++) {
+            for (int j = 0; j < strlist.get(i).size(); j++) {
+                System.out.print(strlist.get(i).get(j) + " ");
+            }
+        }
+        Iterator<String> it = animal.iterator();
+        String animals = iterator.next();
+        String d = "Manu";
+        if (names.equals(d)) {
+            System.out.println("Present");
+        } else {
+            System.out.println(d + " " + "not present in the list");
+        }
+    }
 }
-
-

@@ -2,7 +2,10 @@ package org.obs.seleniumcommands;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.obs.homework.Utility;
+import org.obs.homework.UtilityExcel;
 import org.openqa.selenium.*;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -15,7 +18,14 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyEvent;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.time.Duration;
 import java.util.*;
+import java.util.List;
 
 public class SeleniumCommands {
     WebDriver driver;
@@ -63,24 +73,26 @@ public class SeleniumCommands {
     }
 
     @Test
-    public void verifyLogin() throws InterruptedException {
-        driver.get("http://demowebshop.tricentis.com/");
-        WebElement login = driver.findElement(By.cssSelector("a.ico-login"));
+    public void verifyLogin() throws IOException {
+        driver.get("http://demowebshop.tricentis.com");
+        WebElement login = driver.findElement(By.cssSelector("li>a.ico-login"));
         login.click();
-        WebElement email = driver.findElement(By.cssSelector("input.email"));
-        email.sendKeys("nandhamg5078@gmail.com");
-        WebElement password = driver.findElement(By.cssSelector("input[type='Password']"));
-        password.sendKeys("sagarmala943");
-        WebElement remind = driver.findElement(By.cssSelector("input#RememberMe"));
-        remind.click();
+        UtilityExcel excel=new UtilityExcel();
+        List<String> data=excel.readDataFromExcel("\\src\\main\\resources\\TestData.xlsx","Login");
+        WebElement loginEmail = driver.findElement(By.cssSelector("input#Email"));
+        System.out.println(data);
+        loginEmail.sendKeys(data.get(2));
+        WebElement password = driver.findElement(By.cssSelector("input.password"));
+        password.sendKeys(data.get(3));
+        WebElement checkbox = driver.findElement(By.cssSelector("input[type='checkbox']"));
+        checkbox.click();
         WebElement submit = driver.findElement(By.cssSelector("input[value='Log in']"));
         submit.click();
-        WebElement acc = driver.findElement(By.xpath("//div[@class='header-links']//a[@class='account']"));
-        String actualUsername = acc.getText();
-        String expectedUsername = "nandhamg5078@gmail.com";
-        Assert.assertEquals(actualUsername, expectedUsername, "User login Failed");
+        WebElement account = driver.findElement(By.xpath("//div[@class='header-links']//a[@class='account']"));
+        String actualemailID = account.getText();
+        String expectedemailID = "nandhamg5078@gmail.com";
+        Assert.assertEquals(actualemailID, expectedemailID, "User login Failed");
     }
-
     @Test
     public void verifyClear() throws InterruptedException {
         driver.get("http://demowebshop.tricentis.com/");
@@ -526,11 +538,38 @@ public class SeleniumCommands {
     public void verifyFileUpload(){
         driver.get("https://demo.guru99.com/test/upload/");
         WebElement choosefile=driver.findElement(By.xpath("//input[@id='uploadfile_0']"));
+        choosefile.click();
         choosefile.sendKeys("E:\\Selenium_Files\\Sample.txt");
         WebElement checkbox=driver.findElement(By.xpath("//input[@id='terms']"));
         checkbox.click();
         WebElement submitfile= driver.findElement(By.xpath("//button[@id='submitbutton']"));
         submitfile.click();
+    }
+    @Test
+    public void fileuploadusingRobertclass() throws AWTException {
+        driver.get("https://www.monsterindia.com/seeker/registration");
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+        WebElement chooseFile=driver.findElement(By.xpath("//span[text()='Choose CV']"));
+        chooseFile.click();
+        StringSelection S=new StringSelection("E:\\Selenium_Files\\Sample.txt");
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(S,null);
+        Robot robot=new Robot();
+        robot.keyPress(KeyEvent.VK_ENTER);
+        robot.keyRelease(KeyEvent.VK_ENTER);
+        robot.keyPress(KeyEvent.VK_CONTROL);
+        robot.keyPress(KeyEvent.VK_V);
+        robot.keyRelease(KeyEvent.VK_CONTROL);
+        robot.keyRelease(KeyEvent.VK_V);
+        robot.keyPress(KeyEvent.VK_ENTER);
+        robot.keyRelease(KeyEvent.VK_ENTER);
+    }
+    @Test
+    public void verifyJavaScriptExecutor(){
+        driver.get("http://demowebshop.tricentis.com/");
+        JavascriptExecutor js=(JavascriptExecutor)driver;
+        js.executeScript("document.getElementById(\"newsletter-email\").value='nan@gmail.com'");
+        js.executeScript("document.getElementById(\"newsletter-subscribe-button\").click()");
+
     }
 }
 

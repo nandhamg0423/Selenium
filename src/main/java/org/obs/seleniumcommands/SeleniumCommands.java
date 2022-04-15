@@ -1,7 +1,9 @@
 package org.obs.seleniumcommands;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.apache.commons.io.FileUtils;
 import org.checkerframework.checker.units.qual.A;
+import org.obs.homework.TableUtility;
 import org.obs.homework.Utility;
 import org.obs.homework.UtilityExcel;
 import org.openqa.selenium.*;
@@ -12,8 +14,12 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -22,11 +28,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class SeleniumCommands {
     WebDriver driver;
@@ -54,6 +62,23 @@ public class SeleniumCommands {
         driver.manage().deleteAllCookies();
         driver.manage().window().maximize();
     }
+    //NAVIGATION COMMANDS
+    //driver.navigate().to("http://demowebshop.tricentis.com/login");//used instead of driver.get
+    //driver.navigate().back(); //Takes youback by one page on the browser's history.
+    //driver.navigate().forward(); //Takes you forward by one page on the browser's history.
+    //driver.navigate().refresh(); // to refresh the page
+
+
+    // how to get title
+    // String actTitle = driver.getTitle();
+    // System.out.println(actTitle);
+
+    // String currentUrl = driver.getCurrentUrl();
+    // System.out.println(currentUrl);
+
+    //sourse code
+    // String pageSourse = driver.getPageSource();
+    // System.out.println(pageSourse);
 
     @BeforeMethod
     public void setUp() {
@@ -61,8 +86,13 @@ public class SeleniumCommands {
     }
 
     @AfterMethod
-    public void tearDown() {
-        //driver.close();
+    public void tearDown(ITestResult result) throws IOException {
+        if (ITestResult.FAILURE == result.getStatus()) {
+            TakesScreenshot takesScreenshot = (TakesScreenshot) driver;
+            File sreenshot = takesScreenshot.getScreenshotAs(OutputType.FILE);
+            FileUtils.copyFile(sreenshot, new File("./Screenshots/" + result.getName() + ".png"));
+        }
+        driver.close();
     }
 
     @Test
@@ -73,10 +103,12 @@ public class SeleniumCommands {
         Assert.assertEquals(actualTitle, expectedTitle, "Invalid PageTitle");
     }
 
-    @Test
+    /*@Test
     public void verifyLogin() throws IOException {
         driver.get("http://demowebshop.tricentis.com");
         WebElement login = driver.findElement(By.cssSelector("li>a.ico-login"));
+        //driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);//not valid
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
         login.click();
         UtilityExcel excel = new UtilityExcel();
         List<String> data = excel.readDataFromExcel("\\src\\main\\resources\\TestData.xlsx", "Login");
@@ -87,13 +119,29 @@ public class SeleniumCommands {
         password.sendKeys(data.get(3));
         WebElement checkbox = driver.findElement(By.cssSelector("input[type='checkbox']"));
         checkbox.click();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[value='Log in']")));
         WebElement submit = driver.findElement(By.cssSelector("input[value='Log in']"));
         submit.click();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));//implicit wait
         WebElement account = driver.findElement(By.xpath("//div[@class='header-links']//a[@class='account']"));
         String actualemailID = account.getText();
         String expectedemailID = "nandhamg5078@gmail.com";
         Assert.assertEquals(actualemailID, expectedemailID, "User login Failed");
+    }*/
+    @Test
+    public void verifyLogin() throws IOException {
+        driver.get("http://demowebshop.tricentis.com");
+        WebElement loginEmail = driver.findElement(By.cssSelector("input#Email"));
+        loginEmail.sendKeys("nandhamg5078@gmail.com");
+        WebElement password = driver.findElement(By.cssSelector("input.password"));
+        password.sendKeys("abc123");
+        WebElement submit = driver.findElement(By.cssSelector("input[value='Log in']"));
+        submit.click();
+
     }
+
+
 
     @Test
     public void verifyClear() throws InterruptedException {
@@ -538,6 +586,7 @@ public class SeleniumCommands {
         actions.sendKeys(Keys.TAB).build().perform();
         /**pasting address**/
         actions.keyDown(Keys.CONTROL).sendKeys("V").keyUp(Keys.CONTROL).build().perform();
+
     }
 
     @Test
@@ -577,45 +626,127 @@ public class SeleniumCommands {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("document.getElementById(\"newsletter-email\").value='nan@gmail.com'");
         js.executeScript("document.getElementById(\"newsletter-subscribe-button\").click()");
-
     }
 
     @Test
     public void multiDimensionalArray() {
-        ArrayList<ArrayList<String>> strlist = new ArrayList<ArrayList<String>>();
-        ArrayList<String> birds = new ArrayList<String>();
-        birds.add("parrot");
-        birds.add("crow");
-        birds.add("peacock");
-        ArrayList<String> animal = new ArrayList<String>();
-        animal.add("cow");
-        animal.add("elephant");
-        animal.add("cat");
-        ArrayList<String> color = new ArrayList<String>();
-        color.add("blue");
-        color.add("green");
-        color.add("red");
-        ArrayList<String> names = new ArrayList<String>();
-        names.add("Peter");
-        names.add("sam");
-        names.add("Sankar");
-        System.out.println(birds);
-        System.out.println(animal);
-        System.out.println(color);
-        System.out.println(names);
-        Iterator<String> iterator = animal.iterator();
-        for (int i = 0; i < strlist.size(); i++) {
-            for (int j = 0; j < strlist.get(i).size(); j++) {
-                System.out.print(strlist.get(i).get(j) + " ");
+        int Count = 3;
+        ArrayList<ArrayList<String>> str = new ArrayList<ArrayList<String>>(Count);
+        for (int i = 0; i < Count; i++) {
+            str.add(new ArrayList());
+        }
+        str.get(0).add(0, "shawn");
+        str.get(0).add(1, "antony");
+        str.get(0).add(2, "sachin");
+        str.get(1).add(0, "ann");
+        str.get(1).add(1, "sam");
+        str.get(1).add(2, "john");
+        str.get(2).add(0, "peter");
+        str.get(2).add(1, "noa");
+        str.get(2).add(2, "richard");
+        Count = str.size();
+        System.out.println(str.size());
+        for (int i = 0; i < Count; i++) {
+            int count1 = str.get(i).size();
+            for (int j = 0; j < Count; j++) {
+                if (str.get(i).get(j).contains("noa")) {
+                    System.out.println("List contains");
+                } else {
+                    System.out.println("Not contain");
+                }
+                break;
             }
         }
-        Iterator<String> it = animal.iterator();
-        String animals = iterator.next();
-        String d = "Manu";
-        if (names.equals(d)) {
+    }
+
+    @Test
+    public void multiDimensionalArrayIterator() {//using iterator
+        int Count = 3;
+        ArrayList<ArrayList<String>> str = new ArrayList<ArrayList<String>>(Count);
+        ArrayList<String> element = new ArrayList<String>();
+        for (int i = 0; i < Count; i++) {
+            str.add(new ArrayList());
+        }
+        str.get(0).add(0, "shawn");
+        str.get(0).add(1, "antony");
+        str.get(0).add(2, "sachin");
+        str.get(1).add(0, "ann");
+        str.get(1).add(1, "sam");
+        str.get(1).add(2, "john");
+        str.get(2).add(0, "peter");
+        str.get(2).add(1, "noa");
+        str.get(2).add(2, "richard");
+        //Count = str.size();
+        System.out.println(str.size());
+        Iterator<String> iterator = element.iterator();
+        for (int i = 0; i < str.size(); i++) {
+            for (int j = 0; j < str.get(i).size(); j++) {
+                System.out.print(str.get(i).get(j) + " ");
+            }
+        }
+        Iterator<String> it = element.iterator();
+        String ele = iterator.next();
+        String d = "malu";
+        if (element.contains(d)) {
             System.out.println("Present");
         } else {
             System.out.println(d + " " + "not present in the list");
         }
+    }
+
+    @Test
+    public void verifyScroll() {
+        driver.get("https://demo.guru99.com/test/guru99home/");
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("window.scrollBy(0,1000)");
+    }
+
+    @Test
+    public void verifyTableHeadres() {
+        driver.get("https://www.w3schools.com/html/html_tables.asp");
+        List<WebElement> header = driver.findElements(By.xpath("//table[@id='customers']//th"));
+        List<String> actual = new ArrayList<>();
+        for (int i = 0; i < header.size(); i++) {
+            actual.add(header.get(i).getText());
+        }
+        List<String> expected = new ArrayList<>();
+        expected.add("Company");
+        expected.add("Contact");
+        expected.add("Country");
+        Assert.assertEquals(actual, expected, "not matching");
+    }
+
+    @Test
+    public void verifyValueinTable() {
+        driver.get("https://www.w3schools.com/html/html_tables.asp");
+        List<WebElement> rowElement = driver.findElements(By.xpath("//table[@id='customers']//tr"));
+        List<String> actualData = new ArrayList<>();
+        for (int i = 2; i < rowElement.size(); i++) {
+            List<WebElement> rowValues = driver.findElements(By.xpath("//table[@id='customers']//tr[" + i + "]//td"));
+            if (rowValues.get(0).getText().equals("Island Trading")) {
+                for (int j = 0; j < rowValues.size(); j++) {
+                    actualData.add(rowValues.get(j).getText());
+                }
+            }
+        }
+        List<String> expectedData = new ArrayList<>();
+        expectedData.add("Island Trading");
+        expectedData.add("Helen Bennett");
+        expectedData.add("UK");
+        Assert.assertEquals(actualData, expectedData, "not matching");
+    }
+
+    @Test
+    public void verifyReadTable() throws IOException {
+        driver.get("https://www.w3schools.com/html/html_tables.asp");
+        UtilityExcel excelUtility = new UtilityExcel();
+        List<ArrayList<String>> expected = excelUtility.readDatasFromExcel("\\src\\main\\resources\\TestData.xlsx", "Table");
+        System.out.println(expected);
+        List<WebElement> rowElement = driver.findElements(By.xpath("//table[@id='customers']//tr"));
+        List<WebElement> columnElement = driver.findElements(By.xpath("//table[@id='customers']//tr//td"));
+        TableUtility tableUtility=new TableUtility();
+        List<ArrayList<String>> actual =tableUtility.getGridData(rowElement,columnElement);
+        System.out.println(actual);
+        Assert.assertEquals(actual,expected,"table error");
     }
 }

@@ -130,18 +130,15 @@ public class SeleniumCommands {
         Assert.assertEquals(actualemailID, expectedemailID, "User login Failed");
     }*/
     @Test
-    public void verifyLogin() throws IOException {
+    public void verifyLogin(){
         driver.get("http://demowebshop.tricentis.com");
-        WebElement loginEmail = driver.findElement(By.cssSelector("input#Email"));
+        WebElement loginEmail = driver.findElement(By.xpath("//input[@id='Email']"));
         loginEmail.sendKeys("nandhamg5078@gmail.com");
-        WebElement password = driver.findElement(By.cssSelector("input.password"));
+        WebElement password = driver.findElement(By.xpath("//input[@id='Password']"));
         password.sendKeys("abc123");
-        WebElement submit = driver.findElement(By.cssSelector("input[value='Log in']"));
+        WebElement submit = driver.findElement(By.xpath("//input[@class='button-1 login-button']"));
         submit.click();
-
     }
-
-
 
     @Test
     public void verifyClear() throws InterruptedException {
@@ -332,13 +329,13 @@ public class SeleniumCommands {
         }
         WebElement country = driver.findElement(By.xpath("//select[contains(@name,'country')]"));
         Select select = new Select(country);
-        select.selectByIndex(0);
-        //select.selectByValue("INDIA");
+        //select.selectByIndex(0);
+        select.selectByValue("INDIA");
         //select.selectByVisibleText("INDIA");
         List<WebElement> dropdownoption = select.getOptions();
         System.out.println(dropdownoption.size());
         for (int i = 0; i < dropdownoption.size(); i++) {
-            System.out.println(dropdownoption.get(i));
+           // System.out.println(dropdownoption.get(i));
         }
     }
 
@@ -402,11 +399,12 @@ public class SeleniumCommands {
         List<WebElement> colorDropdown = colorSelect.getOptions();
         for (int i = 0; i < colorDropdown.size(); i++) {
             System.out.println(colorDropdown.get(i));
-            colorDropdown.get(1).click();
-            WebElement colorPresent = driver.findElement(By.xpath("//div[@id='message-one']"));
-            String actualcolorPresent = colorPresent.getText();
-            String expextedcolorPresent = "Selected Color : Red";
-            Assert.assertEquals(actualcolorPresent, expextedcolorPresent, "Error message");
+            colorDropdown.get(0).click();
+           // WebElement colorPresent = driver.findElement(By.xpath("//div[@id='message-one']"));
+            //String actualcolorPresent = colorPresent.getText();
+           // String expextedcolorPresent = "Selected Color : Red";
+           // Assert.assertEquals(actualcolorPresent, expextedcolorPresent, "Error message");
+
         }
     }
 

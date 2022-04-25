@@ -1,64 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Regression Suite">
-    <test name="Functional Testing">
+<suite name="Smoke Suite">
+    <test name="Smoke Testing" parallel="methods" thread-count="2">
+
         <classes>
             <class name="org.obs.seleniumcommands.SeleniumCommands">
                 <methods>
                     <include name="verifyHomepageTitle"/>
                     <include name="verifyLogin"/>
-                    <include name="verifyClear"/>
-                    <include name="verifyWebElementCommands"/>
-                    <include name="searchButton"/>
-                    <include name="gender"/>
-                    <include name="verifyGender"/>
-                    <include name="verifyElementPresent"/>
-                    <include name="verifyElementenabled"/>
-                    <include name="checkboxSelectionStatus"/>
-                    <include name="verifyPromptAlert"/>
-                    <include name="verifySimpleAlert"/>
-                    <include name="verifyConfirmationAlert"/>
-                    <include name="verifyDropDown"/>
-                    <include name="demoDeleteAlert"/>
-                    <include name="verifyMultipleWindows"/>
-                    <include name="verifyFramesInSelenium"/>
-                    <include name="verifyFirstScrollBar"/>
-                    <include name="verifyscrollMultiple"/>
-                    <include name="verifyfirstSelect"/>
-                    <include name="verifygetallColor"/>
-                    <include name="verifydeselectColor"/>
-                    <include name="verifymainMultiple"/>
-                    <include name="verfifyRightClick"/>
-                    <include name="verifydoubleclick"/>
-                    <include name="verifymainofmenu"/>
-                    <include name="verifysubMenu"/>
-                    <include name="mainofmenuBar"/>
-                    <include name="verifydemotourMenuItem"/>
-                    <include name="verifyMainDemotourMousHover"/>
-                    <include name="verifyDragandDrop"/>
-                    <include name="draganddropBy"/>
-                    <include name="keyboardActions"/>
-                    <include name="verifyFileUpload"/>
-                    <include name="fileuploadusingRobertclass"/>
-                    <include name="verifyJavaScriptExecutor"/>
-                    <include name="multiDimensionalArray"/>
-                    <include name="multiDimensionalArrayIterator"/>
-                    <include name="verifyScroll"/>
-                    <include name="verifyTableHeadres"/>
-                    <include name="verifyValueinTable"/>
-                    <include name="verifyReadTable"/>
-                </methods>
-            </class>
-            <class name="org.obs.testngcommands.TestNG1">
-                <methods>
-                    <include name="testcase1"/>
-                    <include name="testCase2"/>
-                </methods>
-            </class>
-            <class name="org.obs.testngcommands.TestNG2">
-                <methods>
-                    <include name="testcase3"/>
-                    <include name="testCase4"/>
                 </methods>
             </class>
         </classes>

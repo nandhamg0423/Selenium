@@ -67,15 +67,11 @@ public class SeleniumCommands {
     //driver.navigate().back(); //Takes youback by one page on the browser's history.
     //driver.navigate().forward(); //Takes you forward by one page on the browser's history.
     //driver.navigate().refresh(); // to refresh the page
-
-
     // how to get title
     // String actTitle = driver.getTitle();
     // System.out.println(actTitle);
-
     // String currentUrl = driver.getCurrentUrl();
     // System.out.println(currentUrl);
-
     //sourse code
     // String pageSourse = driver.getPageSource();
     // System.out.println(pageSourse);

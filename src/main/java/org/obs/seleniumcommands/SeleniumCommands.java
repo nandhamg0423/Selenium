@@ -99,34 +99,8 @@ public class SeleniumCommands {
         Assert.assertEquals(actualTitle, expectedTitle, "Invalid PageTitle");
     }
 
-    /*@Test
-    public void verifyLogin() throws IOException {
-        driver.get("http://demowebshop.tricentis.com");
-        WebElement login = driver.findElement(By.cssSelector("li>a.ico-login"));
-        //driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);//not valid
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
-        login.click();
-        UtilityExcel excel = new UtilityExcel();
-        List<String> data = excel.readDataFromExcel("\\src\\main\\resources\\TestData.xlsx", "Login");
-        WebElement loginEmail = driver.findElement(By.cssSelector("input#Email"));
-        System.out.println(data);
-        loginEmail.sendKeys(data.get(2));
-        WebElement password = driver.findElement(By.cssSelector("input.password"));
-        password.sendKeys(data.get(3));
-        WebElement checkbox = driver.findElement(By.cssSelector("input[type='checkbox']"));
-        checkbox.click();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[value='Log in']")));
-        WebElement submit = driver.findElement(By.cssSelector("input[value='Log in']"));
-        submit.click();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));//implicit wait
-        WebElement account = driver.findElement(By.xpath("//div[@class='header-links']//a[@class='account']"));
-        String actualemailID = account.getText();
-        String expectedemailID = "nandhamg5078@gmail.com";
-        Assert.assertEquals(actualemailID, expectedemailID, "User login Failed");
-    }*/
     @Test
-    public void verifyLogin(){
+    public void verifyLogin() {
         driver.get("http://demowebshop.tricentis.com");
         WebElement loginEmail = driver.findElement(By.xpath("//input[@id='Email']"));
         loginEmail.sendKeys("nandhamg5078@gmail.com");
@@ -331,7 +305,7 @@ public class SeleniumCommands {
         List<WebElement> dropdownoption = select.getOptions();
         System.out.println(dropdownoption.size());
         for (int i = 0; i < dropdownoption.size(); i++) {
-           // System.out.println(dropdownoption.get(i));
+            // System.out.println(dropdownoption.get(i));
         }
     }
 
@@ -396,10 +370,10 @@ public class SeleniumCommands {
         for (int i = 0; i < colorDropdown.size(); i++) {
             System.out.println(colorDropdown.get(i));
             colorDropdown.get(0).click();
-           // WebElement colorPresent = driver.findElement(By.xpath("//div[@id='message-one']"));
+            // WebElement colorPresent = driver.findElement(By.xpath("//div[@id='message-one']"));
             //String actualcolorPresent = colorPresent.getText();
-           // String expextedcolorPresent = "Selected Color : Red";
-           // Assert.assertEquals(actualcolorPresent, expextedcolorPresent, "Error message");
+            // String expextedcolorPresent = "Selected Color : Red";
+            // Assert.assertEquals(actualcolorPresent, expextedcolorPresent, "Error message");
 
         }
     }
@@ -738,9 +712,9 @@ public class SeleniumCommands {
         System.out.println(expected);
         List<WebElement> rowElement = driver.findElements(By.xpath("//table[@id='customers']//tr"));
         List<WebElement> columnElement = driver.findElements(By.xpath("//table[@id='customers']//tr//td"));
-        TableUtility tableUtility=new TableUtility();
-        List<ArrayList<String>> actual =tableUtility.getGridData(rowElement,columnElement);
+        TableUtility tableUtility = new TableUtility();
+        List<ArrayList<String>> actual = tableUtility.getGridData(rowElement, columnElement);
         System.out.println(actual);
-        Assert.assertEquals(actual,expected,"table error");
+        Assert.assertEquals(actual, expected, "table error");
     }
 }

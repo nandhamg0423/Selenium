@@ -6,7 +6,7 @@
         <parameter name="url" value="http://demowebshop.tricentis.com/"/>
         <groups>
             <run>
-                <include name="smoke"></include>
+                <include name="sanity"></include>
             </run>
         </groups>
         <classes>
